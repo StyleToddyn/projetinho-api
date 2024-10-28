@@ -1,11 +1,15 @@
 import { useState } from "react";
-
+import Api from "../Api/Api";
 function App() {
-  const [count, setCount] = useState(0);
+  const [nome, setNome] = useState(null)
+
+
 
   return (
     <>
-      <h1 className="text-center text-3xl font-bold underline">Hello world!</h1>
+      <h1 className="text-center m-2 text-3xl font-bold underline">Hello world!</h1>
+      <input type="text" className="border" onChange={(e)=> {setNome(e.target.value)}} />
+    <Api nome={nome}/>
     </>
   );
 }
