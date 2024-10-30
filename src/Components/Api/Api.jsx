@@ -1,6 +1,5 @@
-export default function Api({ nome,setPersonagem }) {
-
-  let url = `https://swapi.dev/api/people/?search=${nome}`;
+export default function Api({ nome, setPersonagem, search }) {
+  let url = `https://swapi.dev/api/${(search=="Pokemon")?"people":(search=="Planeta pokemon")?"planets":"starships"}/?search=${nome}`;
   const busca = (nome) => {
     fetch(url)
       .then((resposta) => {
@@ -9,7 +8,6 @@ export default function Api({ nome,setPersonagem }) {
           return resposta.json().then((json) => {
             if (json.results[0].name == nome) {
               setPersonagem(json.results[0]);
-
             }
           });
         }
@@ -18,5 +16,5 @@ export default function Api({ nome,setPersonagem }) {
         console.error("Erro na requisição" + error);
       });
   };
-  return (busca(nome));
+  return busca(nome);
 }
