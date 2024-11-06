@@ -10,28 +10,39 @@ function App() {
   const [personagens, setPersonagens] = useState([]);
 
 
-  const getStar = async (search) => {
+  const getStar = async (search,tipo) => {
     setCarregando(true);
-    const resposta = await fetch(`https://swapi.dev/api/people/?search=${search}`);
+    const resposta = await fetch(`https://swapi.dev/api/${tipo}/?search=${search}`);
     const dados = await resposta.json();
-
     setPersonagens((prevPersonagens) => [
       ...prevPersonagens,
       ...dados.results.map((personagem) => {
         return {
           Id: Math.floor(Math.random()*(100-0)),
-          nome: personagem.name,
-          altura: personagem.height,
-          massa: personagem.mass,
-          URL: personagem.url,
+          Nome:"Nome: " + personagem.name,
+          //Personagem
+          Altura:"Altura: " +  personagem.height,
+          Massa:"Massa: " + personagem.mass,
+          Cabelo: "Cor do cabelo: " + personagem.hair_color,
+          Genero: "Gênero: " + personagem.gender,
+          //Planeta
+          Rotacao:"Rotação: " + personagem.rotation_period,
+          Orbita: "Orbita: " + personagem.orbital_period ,
+          Diametro: "Diametro: " + personagem.diameter,
+          Clima: "Clima: " + personagem.climate,
+          //Nave
+          Modelo: "Modelo: " + personagem.model,
+          Fabricante: "Fabricante: " + personagem.manufacturer,
+          Comprimento: "Comprimento: " + personagem.length,
+          Capacidade:"Capacidade: " + personagem.cargo_capacity,  
+
+          URL:"URL: " + personagem.url
+
         };
 
       })
     ])
-      
-      
-      setCarregando(false);
-      //setPersonagens((prevPersonagens) => [...prevPersonagens, personagens ]);
+       setCarregando(false);
   };
 
    useEffect(() => {
