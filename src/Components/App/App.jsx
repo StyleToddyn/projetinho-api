@@ -1,39 +1,52 @@
+import { useState } from "react";
 import Lista from "../Lista/Lista";
-import { useState,useEffect } from "react";
 
 function App() {
+  const [carregando, setCarregando] = useState(false); 
+  const [busca, setBusca] = useState(""); 
+  const [dados, setDados] = useState({}); 
+  const [tipo, setTipo] = useState("");
 
-  const [carregando, setCarregando] = useState(false);
-  const [busca, setBusca] = useState("");
-  const [personagens, setPersonagens] = useState([]);
-  const [tipo, setTipo] = useState(""); 
+  const getStar = async (search, tipo) => {
+    if (!search || !tipo) return; 
 
+    setCarregando(true); 
+    try {
+     
+      const resposta = await fetch(`https://swapi.dev/api/${tipo}/?search=${search}`);
+      const json = await resposta.json();
 
-  const getStar = async (search,tipo) => {
-    setCarregando(true);
-    const resposta = await fetch(`https://swapi.dev/api/${tipo}/?search=${search}`);
-    const json = await resposta.json();
-
-    if (json.results) {
-      setPersonagens((prevPersonagens) => [
-        ...prevPersonagens,
-        ...json.results
-      ]);
+      if (json.results) {
+       
+        setDados((prevDados) => ({
+          ...prevDados,
+          [tipo]: [
+            ...(prevDados[tipo] || []),
+            ...json.results
+          ]
+        }));
+      }
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error);
+    } finally {
+      setCarregando(false); 
     }
-    setCarregando(false);
   };
 
-  useEffect(() => {
-    if (busca && tipo) {
-      getStar(busca, tipo);
-    }
-  }, [busca, tipo]);
   return (
-    <>
-
-      <h1 className="text-center text-3xl font-bold underline">Hello world!</h1>
-      <Lista  carregando={carregando} personagens={personagens} setPersonagens={setPersonagens} getStar={getStar} setBusca={setBusca} setTipo={setTipo}/>
-    </>
+    <div className="container">
+      <h1 className="text-center text-3xl font-bold underline">Star Wars API</h1>
+      {}
+      <Lista 
+        tipo={tipo} 
+        carregando={carregando} 
+        dados={dados} 
+        setDados={setDados} 
+        getStar={getStar} 
+        setBusca={setBusca} 
+        setTipo={setTipo} 
+      />
+    </div>
   );
 }
 
